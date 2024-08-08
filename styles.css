@@ -106,17 +106,17 @@ body {
 
 /* Gaya untuk pesan */
 .message {
-    max-width: 75%;
+    display: table;
     /* Lebar maksimum pesan */
     margin-bottom: 10px;
     /* Jarak antar pesan */
-    padding: 8px 12px 24px;
+    padding: 8px 25px 8px 12px;
     /* Padding di dalam pesan */
     border-radius: 8px;
     /* Sudut lengkung pinggiran pesan */
     word-wrap: break-word;
     /* Atur pemutusan kata di dalam pesan */
-    box-shadow: 4px 4px 5px -5px rgba(0, 0, 0, 0.7),  0 0 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 4px 4px 5px -5px rgba(0, 0, 0, 0.7), 0 0 5px rgba(0, 0, 0, 0.3);
     /* bayangan */
 }
 
@@ -149,16 +149,18 @@ body {
 .message-timestamp {
     float: right;
     /* kanan */
-    font-size: 10px;
+    font-size: 1.8vh;
     /* Ukuran font waktu pesan */
     color: #666;
     /* Warna teks waktu pesan */
-    margin-top: 4px;
+    margin: 0 -15px 0 -2px;
     /* Jarak atas waktu pesan */
 }
 
 /* Gaya untuk area komposisi pesan */
 .compose {
+    position: fixed;
+    bottom: 0;
     display: flex;
     /* Gunakan tata letak flexbox */
     align-items: center;
@@ -169,10 +171,14 @@ body {
     /* Warna latar belakang area komposisi */
     border-top: 1px solid #ccc;
     /* Garis atas area komposisi */
+    flex: 1;
+    /* Gunakan ruang tersisa untuk textarea */
+    width: 100%;
+    /* full */
 }
 
 /* Gaya untuk textarea pesan */
-.compose textarea {
+textarea {
     flex: 1;
     /* Gunakan ruang tersisa untuk textarea */
     min-height: 30px;
