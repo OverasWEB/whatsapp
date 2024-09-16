@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List - Hacker Theme</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- css -->
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+        }
+
+        .back {
+            width: 100%;
+            background-color: #003300;
+            text-decoration: none;
+            text-align: left;
+            padding: 15px 0 15px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #00ff00;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 -10px 8px 10px rgba(0, 255, 0, 0.5);
+        }
+
+        i {
+            font-size: 1.1em;
+        }
+
+        .task-container {
+            max-width: 800px;
+            padding: 20px;
+            background-color: #111;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            margin: 10vh 0 20vh 0;
+        }
+
+        .task-input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 5em;
+        }
+
+        .task-input-container input {
+            padding: 10px;
+            border: 2px solid #0f0;
+            background-color: #000;
+            color: #0f0;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        .task-input-container button {
+            background-color: #00f;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+            text-transform: uppercase;
+        }
+
+        .task-input-container button:hover {
+            background-color: #00c;
+        }
+
+        .group {
+            border: 2px solid #0f0;
+            margin-bottom: 10px;
+            /* Reduce the gap between groups */
+            padding: 15px;
+            border-radius: 10px;
+            background-color: #222;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0f0;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: #f00;
+            /* Change group header color to red */
+        }
+
+        .group-header button {
+            background: none;
+            color: #00f;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            font-size: 2em;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .group-header button i {
+            font-weight: 900;
+        }
+
+        .group-header button:hover {
+            color: #00c;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-list li {
+            padding: 2px 0;
+            border-bottom: 1px solid #0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #00ccff;
+            /* Change task text color to blue */
+            font-size: 1.15em;
+        }
+
+        .task-list li button {
+            background: none;
+            color: #0f0;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-size: 1.5em;
+            line-height: 1;
+            text-align: center;
+        }
+
+        .task-list li button i {
+            font-size: 0.8em;
+        }
+
+        .task-list li button:hover {
+            color: #0c0;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="home.html" class="back"><i class="fa-solid fa-arrow-left"></i> Todo_List_Progress</a>
+
+    <div class="task-container">
+        <div class="task-input-container">
+            <input type="text" id="groupName" placeholder="Group name...">
+            <button onclick="addGroup()">Add Group</button>
+        </div>
+        <div id="groups"></div>
+    </div>
+
+
+    <!-- js -->
+    <script>
+        let db;
+
+        // Open IndexedDB
+        const request = indexedDB.open('TodoListDB', 1);
+
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            const groupStore = db.createObjectStore('groups', { keyPath: 'id', autoIncrement: true });
+            groupStore.createIndex('name', 'name', { unique: false });
+            groupStore.createIndex('tasks', 'tasks', { unique: false });
+        };
+
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            loadGroups();
+        };
+
+        request.onerror = function (event) {
+            console.error('Database error:', event.target.errorCode);
+        };
+
+        function addGroup() {
+            const groupName = document.getElementById('groupName').value.trim();
+            if (!groupName) return;
+
+            const transaction = db.transaction(['groups'], 'readwrite');
+            const groupStore = transaction.objectStore('groups');
+            const group = {
+                name: groupName,
+                tasks: []
+            };
+            const request = groupStore.add(group);
+
+            request.onsuccess = function () {
+                loadGroups();
+                document.getElementById('groupName').value = '';
+            };
+
+            request.onerror = function (event) {
+                console.error('Add group error:', event.target.errorCode);
+            };
+        }
+
+        function addTask(taskInput, taskList, groupId) {
+            const taskName = taskInput.value.trim();
+            if (!taskName) return;
+
+            const transaction = db.transaction(['groups'], 'readwrite');
+            const groupStore = transaction.objectStore('groups');
+            const request = groupStore.get(groupId);
+
+            request.onsuccess = function (event) {
+                const group = event.target.result;
+                group.tasks.push(taskName);
+                groupStore.put(group);
+
+                const taskItem = document.createElement('li');
+                const taskText = document.createElement('span');
+                taskText.textContent = taskName;
+
+                const deleteTaskBtn = document.createElement('button');
+                deleteTaskBtn.innerHTML = '<i class="fas fa-xmark"></i>';
+                deleteTaskBtn.onclick = () => {
+                    if (confirm("Are you sure you want to delete this task?")) {
+                        const taskIndex = group.tasks.indexOf(taskName);
+                        if (taskIndex > -1) {
+                            group.tasks.splice(taskIndex, 1);
+                            groupStore.put(group);
+                            taskItem.remove();
+                        }
+                    }
+                };
+
+                taskItem.appendChild(taskText);
+                taskItem.appendChild(deleteTaskBtn);
+                taskList.prepend(taskItem);  // Add new task to the top of the list
+
+                taskInput.value = '';
+            };
+
+            request.onerror = function (event) {
+                console.error('Add task error:', event.target.errorCode);
+            };
+        }
+
+        function loadGroups() {
+            const groupsContainer = document.getElementById('groups');
+            groupsContainer.innerHTML = '';
+
+            const transaction = db.transaction(['groups'], 'readonly');
+            const groupStore = transaction.objectStore('groups');
+            const request = groupStore.openCursor();
+
+            request.onsuccess = function (event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const group = cursor.value;
+                    const groupContainer = document.createElement('div');
+                    groupContainer.classList.add('group');
+
+                    const groupHeader = document.createElement('div');
+                    groupHeader.classList.add('group-header');
+
+                    const groupTitle = document.createElement('span');
+                    groupTitle.textContent = group.name;
+
+                    const deleteGroupBtn = document.createElement('button');
+                    deleteGroupBtn.innerHTML = '<i class="fas fa-xmark"></i>';
+                    deleteGroupBtn.onclick = () => {
+                        if (confirm("Are you sure you want to delete this group?")) {
+                            if (confirm("This action cannot be undone")) {
+                                const transaction = db.transaction(['groups'], 'readwrite');
+                                const groupStore = transaction.objectStore('groups');
+                                groupStore.delete(group.id);
+                                groupContainer.remove();
+                            }
+                        }
+                    };
+
+                    groupHeader.appendChild(groupTitle);
+                    groupHeader.appendChild(deleteGroupBtn);
+                    groupContainer.appendChild(groupHeader);
+
+                    const taskInputContainer = document.createElement('div');
+                    taskInputContainer.classList.add('task-input-container');
+
+                    const taskInput = document.createElement('input');
+                    taskInput.type = 'text';
+                    taskInput.placeholder = 'Task name';
+
+                    taskInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                            addTask(taskInput, taskList, group.id);
+                        }
+                    });
+
+                    taskInputContainer.appendChild(taskInput);
+                    groupContainer.appendChild(taskInputContainer);
+
+                    const taskList = document.createElement('ul');
+                    taskList.classList.add('task-list');
+                    groupContainer.appendChild(taskList);
+
+                    group.tasks.forEach(task => {
+                        const taskItem = document.createElement('li');
+
+                        const taskText = document.createElement('span');
+                        taskText.textContent = task;
+
+                        const deleteTaskBtn = document.createElement('button');
+                        deleteTaskBtn.innerHTML = '<i class="fas fa-xmark"></i>';
+                        deleteTaskBtn.onclick = () => {
+                            if (confirm("Are you sure you want to delete this task?")) {
+                                const taskIndex = group.tasks.indexOf(task);
+                                if (taskIndex > -1) {
+                                    group.tasks.splice(taskIndex, 1);
+                                    const transaction = db.transaction(['groups'], 'readwrite');
+                                    const groupStore = transaction.objectStore('groups');
+                                    groupStore.put(group);
+                                    taskItem.remove();
+                                }
+                            }
+                        };
+
+                        taskItem.appendChild(taskText);
+                        taskItem.appendChild(deleteTaskBtn);
+                        taskList.appendChild(taskItem);
+                    });
+
+                    groupsContainer.appendChild(groupContainer);
+                    cursor.continue();
+                } else {
+                    // If no more items
+                    console.log('No more groups');
+                }
+            };
+
+            request.onerror = function (event) {
+                console.error('Load groups error:', event.target.errorCode);
+            };
+        }
+
+    </script>
+</body>
+
+</html>

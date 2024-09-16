@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            background-color: #000000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            width: 100%;
+            background-color: #003300;
+            text-decoration: none;
+            text-align: left;
+            padding: 15px 0 15px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #00ff00;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 -10px 8px 10px rgba(0, 255, 0, 0.5);
+        }
+
+        i {
+            font-size: 1.1em;
+        }
+
+        @keyframes slide {
+            from {
+                transform: translateY(-60px);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 12vh;
+            padding: 10px;
+        }
+
+        .home {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1 1 100px;
+            padding: 20px 0;
+            background-color: #222;
+            border: 1.5px solid #00ff00;
+            border-radius: 5px;
+            margin: 5px;
+            text-align: center;
+            color: #00ff00;
+            transition: all 0.3s ease-out;
+        }
+
+        .page:hover {
+            background-color: #0d0d0d;
+            color: #00FF00;
+            transform: scale(1.1);
+            border: 1.5px dashed #00FF00;
+            font-size: 100%;
+            padding: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.7em;
+        }
+
+        .material-icons {
+            font-size: 5em;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <header class="logo"><i class="fa-sharp-duotone fa-solid fa-house"></i> Calistehnic</header>
+
+        <div class="home">
+            <a href="timer.html" class="page">
+                <i class="material-icons">timer</i>
+                Timer
+            </a>
+            <a href="todo list.html" class="page">
+                <i class="material-icons">assignment</i>
+                Todo List
+            </a>
+            <a href="help.html" class="page">
+                <i class="material-icons">help</i>
+                Help?
+            </a>
+            <a href="about.html" class="page">
+                <i class="material-icons">info</i>
+                About
+            </a>
+        </div>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #000000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+        }
+
+        .back {
+            width: 100%;
+            background-color: #003300;
+            text-decoration: none;
+            text-align: left;
+            padding: 15px 0 15px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #00ff00;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 -10px 8px 10px rgba(0, 255, 0, 0.5);
+        }
+
+        i {
+            font-size: 1.1em;
+        }
+
+        .stopwatch {
+            margin: 0 20px;
+            width: 100%;
+            text-align: center;
+            background-color: #000000;
+            padding: 30px 20px;
+            box-shadow: 0 4px 8px rgba(0, 255, 0, 0.5);
+            border: 1.5px solid #00ff00;
+            border-radius: 10px;
+        }
+
+        h2 {
+            margin: 0;
+        }
+
+        .time {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .delay-slider {
+            margin-bottom: 20px;
+        }
+
+        .delay-slider.hidden {
+            display: none;
+        }
+
+        .delay-slider label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .delay-slider input {
+            width: 90%;
+            background: #00ff00;
+        }
+
+        .delay-slider #delay-value {
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls button {
+            background-color: #000000;
+            color: #00ff00;
+            border: none;
+            border-radius: 5px;
+            padding: 7px 14px;
+            margin: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            outline: none;
+        }
+        
+        .controls button:focus {
+            outline: none;
+        }
+        
+        .controls button:hover {
+            background-color: #00ff00;
+            color: #000000;
+        }
+        
+        #reset {
+            transform: scale(0.95);
+            border: 1px solid #00ff00;
+        }
+        
+        .controls #start {
+            background-color: #00ff00;
+            color: #000000;
+        }
+        
+        .controls #start.pause {
+            background-color: #ff0000;
+            color: #000000;
+        }
+        
+        .controls #start.continue {
+            background-color: blue;
+            color: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="home.html" class="back"><i class="fa-solid fa-arrow-left"></i> Stopwatch_Timer</a>
+
+    <div class="stopwatch">
+        <h2>Stopwatch</h2>
+        <div class="time" id="time">00:00:00</div>
+        <div class="delay-slider" id="delay-slider">
+            <label for="delay">Delay: <span id="delay-value">0</span>s</label>
+            <input type="range" id="delay" min="0" max="10" value="0">
+        </div>
+        <div class="controls">
+            <button id="start">Start</button>
+            <button id="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let startTime, updatedTime, difference, tInterval, delayTimeout;
+        let running = false;
+        let paused = false;
+        let accumulatedTime = 0;
+        let delay = 0; // Default delay in seconds
+
+        // Buat objek audio untuk suara beep
+        const beepSound = new Audio('beep.mp3');
+
+        function formatTime(ms) {
+            const minutes = Math.floor(ms / (1000 * 60));
+            const seconds = Math.floor((ms % (1000 * 60)) / 1000);
+            const milliseconds = Math.floor((ms % 1000) / 10); // Konversi milidetik ke ratusan
+            return (
+                String(minutes).padStart(2, '0') + ':' +
+                String(seconds).padStart(2, '0') + ':' +
+                String(milliseconds).padStart(2, '0')
+            );
+        }
+
+        function startTimer() {
+            if (!running) {
+                running = true;
+                paused = false;
+                document.getElementById('start').innerText = 'Pause';
+                document.getElementById('start').classList.add('pause');
+                document.getElementById('start').classList.remove('continue');
+                document.getElementById('delay-slider').classList.add('hidden'); // Sembunyikan slider delay
+
+                // Tunda pemutaran suara beep dan mulai timer sesuai nilai delay
+                setTimeout(function () {
+                    beepSound.play(); // Mainkan suara beep setelah delay
+                }, delay * 1000); // Ubah detik ke milidetik
+
+                delayTimeout = setTimeout(function () {
+                    startTime = new Date().getTime() - accumulatedTime;
+                    tInterval = setInterval(function () {
+                        updatedTime = new Date().getTime();
+                        difference = updatedTime - startTime;
+                        document.getElementById('time').innerText = formatTime(difference);
+                    }, 10); // Interval 10ms
+                }, delay * 1000); // Ubah detik ke milidetik
+            } else if (paused) {
+                running = true;
+                paused = false;
+                document.getElementById('start').innerText = 'Pause';
+                document.getElementById('start').classList.add('pause');
+                document.getElementById('start').classList.remove('continue');
+                document.getElementById('delay-slider').classList.add('hidden'); // Sembunyikan slider delay
+                startTime = new Date().getTime() - accumulatedTime;
+                tInterval = setInterval(function () {
+                    updatedTime = new Date().getTime();
+                    difference = updatedTime - startTime;
+                    document.getElementById('time').innerText = formatTime(difference);
+                }, 10); // Interval 10ms
+            }
+        }
+
+        function pauseTimer() {
+            if (running) {
+                running = false;
+                paused = true;
+                clearInterval(tInterval);
+                clearTimeout(delayTimeout); // Hapus delay timeout jika dijeda
+                accumulatedTime = difference;
+                document.getElementById('start').innerText = 'Continue';
+                document.getElementById('start').classList.add('continue');
+                document.getElementById('start').classList.remove('pause');
+                document.getElementById('delay-slider').classList.remove('hidden'); // Tampilkan slider delay
+            }
+        }
+
+        function resetTimer() {
+            running = false;
+            paused = false;
+            clearInterval(tInterval);
+            clearTimeout(delayTimeout); // Hapus delay timeout jika direset
+            accumulatedTime = 0;
+            document.getElementById('time').innerText = '00:00:00';
+            document.getElementById('start').innerText = 'Start';
+            document.getElementById('start').classList.remove('pause');
+            document.getElementById('start').classList.remove('continue');
+            document.getElementById('delay-slider').classList.remove('hidden'); // Tampilkan slider delay
+        }
+
+        document.getElementById('start').addEventListener('click', function () {
+            if (running) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        });
+
+        document.getElementById('reset').addEventListener('click', resetTimer);
+
+        document.getElementById('delay').addEventListener('input', function () {
+            delay = parseInt(this.value, 10);
+            document.getElementById('delay-value').innerText = delay;
+        });
+    </script>
+</body>
+
+</html>

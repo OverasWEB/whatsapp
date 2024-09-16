@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bantuan Stopwatch</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #000000;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 15vh 2vh;
+            font-size: 0.8em;
+        }
+
+        .back {
+            width: 100%;
+            background-color: #003300;
+            text-decoration: none;
+            text-align: left;
+            padding: 15px 0 15px 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            color: #00ff00;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 -10px 8px 10px rgba(0, 255, 0, 0.5);
+            z-index: 999;
+        }
+
+        i {
+            font-size: 0.6em;
+        }
+
+        .content {
+            background-color: #000000;
+            border: 1.5px solid #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 255, 0, 0.5);
+            width: 80%;
+            max-width: 800px;
+            text-align: left;
+            margin-bottom: 3vh;
+        }
+
+        h1,
+        h2 {
+            color: #ff0000;
+        }
+
+        strong {
+            color: blueviolet;
+        }
+
+        p {
+            color: #00ccff;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* todo */
+        .container {
+            padding: 0 5vw;
+            text-align: justify;
+            margin-top: 10vh;
+            font-size: 0.8em;
+        }
+
+        .app {
+            text-align: center;
+            background-color: blue;
+            color: black;
+            padding: 10px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-family: Arial;
+            border: 2px groove lightblue;
+        }
+
+        .material-icons {
+            font-size: 1.4em;
+            position: relative;
+            top: 0.3em;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="home.html" class="back"><i class="fa-solid fa-arrow-left"></i> Help_page</a>
+
+    <div class="content">
+        <h1 style="text-align: center;"><i class="material-icons">timer</i>Stopwatch Help?</h1>
+        <p>Selamat datang di panduan penggunaan stopwatch kami! Stopwatch ini dirancang untuk membantu Anda mengatur
+            waktu dengan fitur yang sederhana dan mudah digunakan. Berikut adalah penjelasan lengkap tentang cara
+            menggunakan fitur-fitur stopwatch:</p>
+
+        <h2>Fungsi Utama</h2>
+        <p>Stopwatch ini dilengkapi dengan beberapa fungsi utama yang memungkinkan Anda untuk mengatur dan melacak waktu
+            dengan mudah. Berikut adalah deskripsi dari setiap fungsi:</p>
+        <ul>
+            <li><strong>Start:</strong> Memulai timer dari waktu nol. Setelah timer dimulai, tombol ini akan berubah
+                menjadi "Pause" yang memungkinkan Anda untuk menjeda timer. Jika timer sudah berjalan, Anda dapat
+                menggunakan tombol ini untuk memulai timer dari posisi terkini.</li>
+            <li><strong>Pause:</strong> Menjeda timer saat ini. Klik lagi tombol ini untuk melanjutkan timer dari titik
+                berhenti. Tombol ini akan berubah menjadi "Continue" saat timer dalam keadaan dijeda.</li>
+            <li><strong>Continue:</strong> Melanjutkan timer setelah jeda. Jika timer telah dijeda, tombol ini akan
+                memungkinkan Anda untuk melanjutkan timer dari waktu yang tersisa sebelum jeda.</li>
+            <li><strong>Reset:</strong> Mengatur ulang timer ke waktu awal 00:00:00. Fungsi ini akan menghapus semua
+                waktu yang telah dihitung dan memulai ulang timer dari awal.</li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h2>Slider Penundaan</h2>
+        <p>Slider penundaan digunakan untuk mengatur waktu penundaan sebelum timer mulai menghitung. Ini berguna
+            jika
+            Anda ingin memberi waktu tambahan sebelum stopwatch mulai. Geser slider ke kiri atau kanan untuk memilih
+            penundaan dalam detik. Nilai penundaan akan ditampilkan di samping slider.</p>
+    </div>
+
+    <div class="content">
+        <h2>Cara Menggunakan Stopwatch</h2>
+        <p>Berikut adalah langkah-langkah untuk menggunakan stopwatch dengan efektif:</p>
+        <ul>
+            <li>Jika Anda ingin mengatur penundaan sebelum timer mulai, gunakan slider penundaan untuk memilih
+                durasi
+                yang diinginkan. Ini akan memberikan waktu ekstra sebelum timer mulai menghitung.</li>
+            <li>Klik tombol "Start" untuk memulai timer. Stopwatch akan mulai menghitung dari waktu nol, atau dari
+                posisi terkini jika timer sudah berjalan sebelumnya.</li>
+            <li>Jika Anda perlu menghentikan sementara timer, klik tombol "Pause". Stopwatch akan berhenti
+                menghitung
+                dan Anda dapat melanjutkannya nanti dengan tombol "Continue".</li>
+            <li>Untuk melanjutkan timer setelah jeda, klik tombol "Continue". Timer akan melanjutkan dari posisi
+                terakhir sebelum dijeda.</li>
+            <li>Jika Anda ingin mengatur ulang timer, klik tombol "Reset". Stopwatch akan kembali ke 00:00:00 dan
+                siap
+                untuk digunakan lagi.</li>
+        </ul>
+
+        <p>coba timer:</p>
+        <a href="timer.html" class="app">klik di sini</a>
+    </div>
+
+
+
+    <!-- todo list -->
+    <div class="container">
+        <hr style="border: 0.01em solid blue;">
+
+
+        <h1 style="text-align: center;"><i class="material-icons">assignment</i>Todo List Help?</h1>
+        <p>Selamat datang di aplikasi Todo List bertema hacker! Panduan berikut akan membantu Anda memahami dan
+            menggunakan aplikasi ini dengan efektif.</p>
+
+        <h2>1. Menambahkan Grup</h2>
+        <p>Untuk menambahkan grup baru, ikuti langkah-langkah berikut:</p>
+        <ul>
+            <li>Ketikkan nama grup pada kotak input di bagian atas halaman.</li>
+            <li>Klik tombol <strong>Add Group</strong> di samping kotak input.</li>
+            <li>Grup baru akan muncul di bawah dengan ruang untuk menambahkan tugas di dalamnya.</li>
+        </ul>
+
+        <h2>2. Menambahkan Tugas</h2>
+        <p>Untuk menambahkan tugas dalam grup yang telah dibuat, ikuti langkah berikut:</p>
+        <ul>
+            <li>Pilih grup yang diinginkan.</li>
+            <li>Ketikkan nama tugas pada kotak input di bawah nama grup.</li>
+            <li>Tekan <strong>Enter</strong> untuk menambahkan tugas ke dalam daftar tugas grup tersebut.</li>
+        </ul>
+
+        <h2>3. Menghapus Grup atau Tugas</h2>
+        <p>Jika Anda perlu menghapus grup atau tugas, lakukan hal berikut:</p>
+        <ul>
+            <li>Untuk menghapus grup: Klik tombol <i class="fas fa-xmark"></i> di samping nama grup.</li>
+            <li>Untuk menghapus tugas: Klik tombol <i class="fas fa-xmark"></i> di samping nama tugas.</li>
+            <li>Anda akan diminta untuk mengkonfirmasi penghapusan. Pastikan Anda yakin sebelum melanjutkan karena
+                tindakan ini tidak dapat dibatalkan.</li>
+        </ul>
+
+        <h2>4. Tips dan Trik</h2>
+        <p>Berikut adalah beberapa tips untuk memaksimalkan penggunaan aplikasi:</p>
+        <ul>
+            <li>Gunakan nama grup dan tugas yang deskriptif untuk mempermudah pengorganisasian.</li>
+            <li>Manfaatkan struktur grup dan tugas untuk membuat rencana dan daftar kegiatan yang lebih teratur.</li>
+            <li>Periksa secara berkala daftar tugas Anda untuk memastikan semua tugas yang penting telah ditangani.</li>
+        </ul>
+
+
+        <p>coba todo list:</p>
+        <a href="todo list.html" class="app">klik di sini</a>
+    </div>
+</body>
+
+</html>
